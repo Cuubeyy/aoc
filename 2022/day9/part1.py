@@ -2,7 +2,6 @@ tasks = open("input.txt").read().splitlines()
 ans = set()
 
 hx, hy = (0, 0)
-tx, ty = (0, 0)
 
 dic = {"U": (0, 1), "D": (0, -1), "L": (-1, 0), "R": (1, 0)}
 
