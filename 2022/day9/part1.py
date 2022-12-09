@@ -1,76 +1,52 @@
 tasks = open("input.txt").read().splitlines()
 ans = set()
 
-hx, hy = (0, 4)
-tx, ty = (0, 4)
+hx, hy = (0, 0)
+tx, ty = (0, 0)
+
+dic = {"U": (0, 1), "D": (0, -1), "L": (-1, 0), "R": (1, 0)}
 
 
 def move_h(c, m):
     global hy, hx
-    if m == "U":
-        for i in range(c):
-            hy -= 1
-            move_t()
-    if m == "D":
-        for i in range(c):
-            hy += 1
-            move_t()
-    if m == "L":
-        for i in range(c):
-            hx -= 1
-            move_t()
-    if m == "R":
-        for i in range(c):
-            hx += 1
-            move_t()
+    for i in range(c):
+        print("H:", (hx, hy), "T:", (tx, ty))
+        move = dic[m]
+        hx += move[0]
+        hy += move[1]
+        print("H:", (hx, hy), "T:", (tx, ty))
+        move_t()
+        print("H:", (hx, hy), "T:", (tx, ty), "\n")
 
 
 def move_t():
     global tx, hx, ty, hy
-
-    if ty == hy:
-        if hx - tx > 1:
-            tx += 1
-        elif hx - tx < -1:
-            tx -= 1
-    elif tx == hx:
-        if ty - hy > 1:
-            ty -= 1
-        elif ty - hy < -1:
+    if tx+1 < hx:
+        tx += 1
+        if ty < hy:
             ty += 1
-    elif ty != hy and tx != ty:
-        if abs(abs(ty) - abs(hy)) > 1:
-            if ty - hy < 0:
-                ty += 1
-                if tx - hx < 0:
-                    tx += 1
-                else:
-                    tx -= 1
-            elif ty - hy > 0:
-                ty -= 1
-                if tx - hx < 0:
-                    tx += 1
-                else:
-                    tx -= 1
-            else:
-                print("!")
-        elif abs(abs(tx) - abs(hx) > 1):
-            if tx > hx:
-                tx += 1
-                if ty - hy < 0:
-                    ty += 1
-                else:
-                    ty -= 1
-            elif tx < hx:
-                tx -= 1
-                if ty - hy < 0:
-                    ty += 1
-                else:
-                    ty -= 1
-            else:
-                print("!")
-    if abs(hx - tx) > 1 or abs(hy - ty) > 1:
-        print("H:", (hx + 1, hy + 1), "T:", (tx + 1, ty + 1))
+        elif ty > hy:
+            ty -= 1
+    elif tx-1 > hx:
+        tx -= 1
+        if ty < hy:
+            ty += 1
+        elif ty > hy:
+            ty -= 1
+
+    elif ty+1 < hy:
+        ty += 1
+        if tx < hx:
+            tx += 1
+        elif tx > hx:
+            tx -= 1
+    elif ty-1 > hy:
+        ty -= 1
+        if tx < hx:
+            tx += 1
+        elif tx > hx:
+            tx -= 1
+
     ans.add((tx, ty))
 
 
@@ -80,9 +56,3 @@ for task in tasks:
     move_h(c, m)
 print(ans)
 print(len(ans))
-
-# 6076 too low
-# 6098
-# 7785 too high
-
-# 2597
