@@ -18,8 +18,7 @@ for card_number, line in enumerate(task):
     for l in range(cards[str(card_number)]):
         for i in range(temp_win):
             cards[str(card_number + 1 + i)] += 1
-
-print(cards)
+            
 for c in cards:
     ans += cards[c]
 print(ans)
