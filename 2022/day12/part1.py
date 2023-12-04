@@ -19,7 +19,7 @@ class Node:
     def add_follower(self, follower):
         if self.position == (6, 2):
             pass
-        if follower.id == self.id or follower.id == self.id + 1:
+        if follower.game_id == self.id or follower.game_id == self.id + 1:
             self.followers.append(follower)
             self.appendet.append(follower.position)
 
