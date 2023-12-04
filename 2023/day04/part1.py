@@ -14,6 +14,5 @@ for line in task:
                 temp_win = 1
             else:
                 temp_win *= 2
-    print(temp_win)
     ans += temp_win
 print(ans)
