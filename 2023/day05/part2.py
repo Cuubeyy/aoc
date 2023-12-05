@@ -1,15 +1,13 @@
 from collections import defaultdict
 
-task = open("input.txt").read().splitlines()
+task = open("test.txt").read().splitlines()
 ans = 10e10
 
 seeds = list(map(int, task.pop(0).split(": ")[1].split()))
-seeds = [range(seeds[i], seeds[i]+seeds[i+1]) for i in range(0, len(seeds), 2)]
-seeds = [item for sublist in seeds for item in sublist]
+seeds = [(seeds[i], seeds[i]+seeds[i+1]) for i in range(0, len(seeds), 2)]
 task.pop(0)
 temp_seeds = seeds.copy()
-did = defaultdict(bool)
-
+did = defaultdict(lambda: False)
 
 for line_index, line in enumerate(task):
     if line == "":
@@ -17,15 +15,25 @@ for line_index, line in enumerate(task):
         print("ending:", seeds)
         continue
     elif "map" in line:
-        did = defaultdict(bool)
+        did = defaultdict(lambda: False)
         print(line.split()[0].split("-")[2])
         print("beginning:", seeds)
         continue
-    destination, range_start, source_range = line.split()
+    mapped_start, source_start, source_length = list(map(int, line.split()))
     for seed_index, seed in enumerate(seeds):
-        if not did[seed_index]:
-            if int(range_start) <= seed <= int(range_start) + int(source_range):
-                temp_seeds[seed_index] = int(destination) + (seed - int(range_start))
+        if did[seed_index]:
+            continue
+        seed_start, seed_length = seed
+        if source_start <= seed_start <= source_start + source_length:
+            if seed_start + seed_length <= source_start + source_length:
+                temp_seeds[seed_index] = (mapped_start, seed_length)
                 did[seed_index] = True
+            else:
+                seed_1 = (mapped_start, source_length - abs(source_start - seed_start))
+                seed_2 = (seed_start + source_length - abs(source_start - seed_start), abs(source_start + source_length - seed_start - seed_length))
+                temp_seeds[seed_index] = seed_1
+                temp_seeds.append(seed_2)
+                did[seed_index] = True
+                did[len(temp_seeds)] = True
 
-print(min(temp_seeds))
+print(temp_seeds)
