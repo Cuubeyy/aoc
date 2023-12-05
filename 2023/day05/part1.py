@@ -4,20 +4,16 @@ ans = 10e10
 seeds = list(map(int, task.pop(0).split(": ")[1].split()))
 task.pop(0)
 temp_seeds = [seed for seed in seeds]
-maps = []
-temp_maps = []
 
 for line_index, line in enumerate(task):
     possible = []
     if line == "":
-        maps.append(temp_maps)
         seeds = [seed for seed in temp_seeds]
         print("ending:", seeds)
         continue
     elif "map" in line:
         print(line.split()[0].split("-")[2])
         print("beginning:", seeds)
-        temp_maps = []
         continue
     destination, range_start, source_range = line.split()
     for seed_index, seed in enumerate(seeds):
