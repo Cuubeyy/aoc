@@ -1,3 +1,6 @@
+from datetime import datetime
+
+start = datetime.now()
 task = open("input.txt").read().splitlines()
 ans = 10e10
 
@@ -9,11 +12,8 @@ for line_index, line in enumerate(task):
     possible = []
     if line == "":
         seeds = [seed for seed in temp_seeds]
-        print("ending:", seeds)
         continue
     elif "map" in line:
-        print(line.split()[0].split("-")[2])
-        print("beginning:", seeds)
         continue
     destination, range_start, source_range = line.split()
     for seed_index, seed in enumerate(seeds):
@@ -22,3 +22,4 @@ for line_index, line in enumerate(task):
 
 seeds = temp_seeds
 print(min(seeds))
+print(datetime.now() - start)

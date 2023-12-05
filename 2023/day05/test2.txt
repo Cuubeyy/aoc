@@ -1,0 +1,5 @@
+seeds: 1 100
+
+fertilizer-to-water map:
+1001 10 2
+2001 20 10
