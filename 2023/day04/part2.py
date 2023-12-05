@@ -12,9 +12,9 @@ for card_number, line in enumerate(task):
         if n in winning:
             temp_win += 1
 
-    for l in range(cards[str(card_number)]):
+    for l in range(cards[card_number]):
         for i in range(temp_win):
-            cards[str(card_number + 1 + i)] += 1
+            cards[card_number + 1 + i] += 1
 for c in cards:
     ans += cards[c]
 print(ans)
