@@ -1,5 +1,3 @@
-from collections import defaultdict
-
 task = open("input.txt").read().splitlines()
 winning_2 = []
 
@@ -20,7 +18,6 @@ for card_index, line in enumerate(task):
     for amount in value:
         amounts.append(amount[1])
     score = 0
-    print(amounts)
     if max(amounts) == 5:
         score = 1
     elif max(amounts) == 4:
@@ -40,30 +37,25 @@ for card_index, line in enumerate(task):
     else:
         score = 7
     winning_2.append((score, hand, amounts, bit))
-    print(hand, score)
 
 
 def get_highest_card(cards_):
     c_h = []
-    dic = {"A": 990, "K": 900, "Q": 890, "J": "000", "T": 790, "9": 700, "8": 690, "7": 600, "6": 500,
-           "5": 400, "4": 300, "3": 200, "2": 100}
-    for card in cards_:
-        amount = ""
-        for c in card[1]:
-            amount += str(dic[c])
-        t = [cd for cd in card]
-        t.append(int(amount))
+    dic = {"A": 99, "K": 90, "Q": 89, "J": "00", "T": 79, "9": 70, "8": 69, "7": 60, "6": 50,
+           "5": 40, "4": 30, "3": 20, "2": 10}
+    for card_stats in cards_:
+        count = ""
+        for c in card_stats[1]:
+            count += str(dic[c])
+        t = [cd for cd in card_stats]
+        t.append(int(count))
         c_h.append(t)
     return c_h
 
 
 cards = sorted(get_highest_card(sorted(winning_2, key=lambda x: (-x[0], x[1]))), key=lambda x: (-x[0], x[-1]))
-print(cards)
 rank, ans = 0, 0
 for i, w in enumerate(cards):
     rank += 1
     ans += w[3] * rank
-    # print(w[3], rank, w[1])
 print(ans)
-
-# 253295076 TOO LOW
