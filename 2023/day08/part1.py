@@ -1,8 +1,5 @@
 task = open("input.txt").read().splitlines()
-ans = 0
 network = {}
-network_2 = []
-did = []
 line_1 = task.pop(0)
 task.pop(0)
 for line in task:
@@ -11,7 +8,6 @@ for line in task:
     element2 = elements.split(", ")[1][:-1]
     network[name] = [element1, element2, 0]
     (name, elements.split(", "))
-    network_2.append([name, (element1, element2)])
 
 step = "AAA"
 count = 0

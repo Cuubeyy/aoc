@@ -1,8 +1,9 @@
+import math
+
 task = open("input.txt").read().splitlines()
 ans = 0
 network = {}
 network_2 = []
-did = []
 line_1 = task.pop(0)
 task.pop(0)
 for line in task:
@@ -15,9 +16,7 @@ for line in task:
         network_2.append(name)
 
 z_repeat = []
-print(network_2)
 for index, s in enumerate(network_2):
-    did = set()
     step = s
     count = 0
     z = ()
@@ -34,22 +33,4 @@ for index, s in enumerate(network_2):
     z_repeat.append(z)
 print(z_repeat)
 
-ans = 1
-count = 111129309
-while True:
-    temp = max(z_repeat)*count
-    p = []
-    for x in z_repeat:
-        if temp % x == 0:
-            p.append(True)
-        else:
-            p.append(False)
-    print(temp, count, p)
-    if all(p):
-        break
-    count += 1
-print(temp)
-
-# 144822660 TOO LOW
-# 1033041428962339627 TOO HIGH
-
+print(math.lcm(*z_repeat))
