@@ -2,7 +2,7 @@ import os
 from aocd import get_data
 
 if os.stat("input.txt").st_size == 0:
-    session = ""
+    session = os.environ.get("AOC_SESSION")
     data = get_data(session)
     with open("input.txt", "w") as f:
         f.write(data)
