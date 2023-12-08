@@ -1,4 +1,4 @@
-task = open("test2.txt").read().splitlines()
+task = open("input.txt").read().splitlines()
 ans = 0
 network = {}
 network_2 = []

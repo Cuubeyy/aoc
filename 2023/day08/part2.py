@@ -1,7 +1,3 @@
-from math import lcm
-
-import numpy as np
-
 task = open("input.txt").read().splitlines()
 ans = 0
 network = {}
@@ -18,22 +14,42 @@ for line in task:
     if name.endswith("A"):
         network_2.append(name)
 
+z_repeat = []
 print(network_2)
-counter = 0
-start_steps = []
-for s in network_2:
+for index, s in enumerate(network_2):
+    did = set()
     step = s
-    counter = 0
-    while not step.endswith("Z"):
-        for instructions in line_1:
-            counter += 1
-            if instructions == "L":
+    count = 0
+    z = ()
+    while not z:
+        for instruction in line_1:
+            if step.endswith("Z") and not z:
+                z = count
+                break
+            if instruction == "L":
                 step = network[step][0]
             else:
                 step = network[step][1]
-            if step.endswith("Z"):
-                break
-    start_steps.append(counter)
+            count += 1
+    z_repeat.append(z)
+print(z_repeat)
 
+ans = 1
+count = 111129309
+while True:
+    temp = max(z_repeat)*count
+    p = []
+    for x in z_repeat:
+        if temp % x == 0:
+            p.append(True)
+        else:
+            p.append(False)
+    print(temp, count, p)
+    if all(p):
+        break
+    count += 1
+print(temp)
 
-print(lcm(*start_steps))
+# 144822660 TOO LOW
+# 1033041428962339627 TOO HIGH
+
