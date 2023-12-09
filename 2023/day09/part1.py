@@ -26,14 +26,11 @@ for line in task:
     last = 0
     for i, layer in enumerate(reversed(layers)):
         if i == 0:
-            layer.insert(0, 0)
+            layer.append(0)
             continue
-        last = layer[0] - last
-        layer.insert(0, last)
+        last = layer[-1] + last
+        layer.append(last)
     ans += last
-    print(layers)
 
 print(ans)
 print(datetime.now() - start)
-
-# 1973284947 FALSE
