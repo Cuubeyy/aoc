@@ -10,7 +10,6 @@ for line in task:
     name, elements = line.split(" = ")
     element1 = elements.split(", ")[0][1:]
     element2 = elements.split(", ")[1][:-1]
-    network[name] = [element1, element2, 0]
     (name, elements.split(", "))
     if name.endswith("A"):
         network_2.append(name)
@@ -31,6 +30,5 @@ for index, s in enumerate(network_2):
                 step = network[step][1]
             count += 1
     z_repeat.append(z)
-print(z_repeat)
 
 print(math.lcm(*z_repeat))
