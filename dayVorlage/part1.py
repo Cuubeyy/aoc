@@ -1,6 +1,9 @@
+from datetime import datetime
 import os
 from aocd import get_data
+import math
 
+start = datetime.now()
 if os.stat("input.txt").st_size == 0:
     session = os.environ.get("AOC_SESSION")
     data = get_data(session)
@@ -16,3 +19,4 @@ for i in task:
     ans += int(i)
 
 print(ans)
+print(datetime.now() - start)
