@@ -1,18 +1,35 @@
 from datetime import datetime
 import os
-from aocd import get_data
 import math
+from get_input import GetInput
 
 start = datetime.now()
-if os.stat("input.txt").st_size == 0:
-    session = os.environ.get("AOC_SESSION")
-    data = get_data(session)
-    with open("input.txt", "w") as f:
-        f.write(data)
 
-task = open("input.txt").read().splitlines()
+
+def get_input(inp):
+    if os.stat("input.txt").st_size == 0:
+        session = os.environ.get("AOC_SESSION")
+        data = GetInput().get_today()
+        with open("input.txt", "w") as f:
+            f.write(data)
+    if inp:
+        return open("input.txt").read()
+    else:
+        return open("test.txt").read()
+
+
+def parse_data():
+    data = get_input(True).splitlines()
+
+    for l in data:
+        pass
+        # DO SOME PARSING
+
+    return data
+
+
 ans = 0
-
+task = parse_data()
 for line in task:
     if line == '':
         continue
