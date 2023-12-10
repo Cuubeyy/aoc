@@ -13,10 +13,10 @@ if os.stat("input.txt").st_size == 0:
 task = open("input.txt").read().splitlines()
 ans = 0
 
-for i in task:
-    if i == '':
+for line in task:
+    if line == '':
         continue
-    ans += int(i)
+    ans += int(line)
 
 print(ans)
 print(datetime.now() - start)
