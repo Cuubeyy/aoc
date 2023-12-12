@@ -107,7 +107,6 @@ for y, line in enumerate(task):
                         elif direction == 0:
                             direction = -1
                     elif pipe in ["F", "7"]:
-                        # print(direction)
                         if direction == 1:
                             open_pipe += 2
                             direction = 0
@@ -118,4 +117,8 @@ for y, line in enumerate(task):
                             direction = 1
                 except:
                     pass
+
+for l in task:
+    print(l)
+
 print(counter)
