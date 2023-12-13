@@ -1,9 +1,11 @@
+import re
+import sys
 from datetime import datetime
 import os
 import math
 from get_input import GetInput
 from itertools import combinations, groupby
-
+from functools import cache
 
 
 def get_input(inp):
@@ -13,72 +15,54 @@ def get_input(inp):
         with open("input.txt", "w") as f:
             f.write(data)
     if inp:
-        return open("input.txt").read()
+        return open("input.txt")
     else:
-        return open("test.txt").read()
+        return open("test.txt")
 
 
 def parse_data(inp1):
-    data = get_input(inp1).splitlines()
     temp_data = []
-    for i, l in enumerate(data):
-        springs, conditions = l.split()
-        springs = ((springs+"?")*5)[:-1]
-        conditions = list(map(int, ((conditions + ",")*5)[:-1].split(",")))
-        groups = ["".join(g) for k, g in groupby(springs)]#if k != '.']
-        temp_data.append((conditions, springs, groups))
+    data = get_input(inp1).readlines()
+    for line in data:
+        line = line.strip()
+        springs, conditions = line.split()
+
+        springs = "?".join([springs] * 5)
+        conditions = tuple(int(x) for x in conditions.split(",")) * 5
+
+        temp_data.append((springs, conditions))
+
     return temp_data
 
 
-def replacer(s, newstring, index):
-    if index < 0:  # add it to the beginning
-        return newstring + s
-    if index > len(s):  # add it to the end
-        return s + newstring
-    return s[:index] + newstring + s[index + 1:]
+@cache
+def solve(springs: str, conditions: tuple[int]) -> int:
+    if len(springs) == 0:
+        if len(conditions) == 0:
+            return 1
+        return 0
 
+    if len(conditions) == 0:
+        if "#" in springs:
+            return 0
+        return 1
 
-def force(springs, conditions):
-    temp = []
-    springs = "".join(springs)
-    for n in range(2 ** len(springs)):
-        temp_springs = springs
-        n = str(bin(n))[2:]
-        n = n.zfill(len(springs))
-        for index, b in enumerate(n):
-            if b == "1":
-                temp_springs = replacer(temp_springs, "#", index)
-            else:
-                temp_springs = replacer(temp_springs, ".", index)
-        temp_lens = []
-        temp_springs_2 = list(filter(None, temp_springs.split(".")))
-        for t in temp_springs_2:
-            temp_lens.append(len(t))
-        if temp_lens == conditions:
-            temp.append(temp_springs)
-    return temp
+    counter = 0
+    if springs[0] in [".", "?"]:
+        counter += solve(springs[1:], conditions)
+
+    if springs[0] in ["#", "?"]:
+        if conditions[0] <= len(springs) and "." not in springs[:conditions[0]]:
+            if conditions[0] == len(springs) or springs[conditions[0]] != "#":
+                counter += solve(springs[conditions[0] + 1:], conditions[1:])
+
+    return counter
 
 
 start = datetime.now()
 ans = 0
-task = parse_data(False)
-for line in task:
-    temp_2 = []
-    conditions, springs, groups = line
-    print(groups)
-    count = 0
-    did = []
-    for g in groups:
-        count = g.count("#")
-        temp = []
-        if count > 0:
-            i = conditions.index(count)
-            before = groups[:i-1]
-            groups = groups[i:]
-
-            temp = [before, conditions[:i]]
-            possible = force(temp[0], temp[1])
-            temp_2.append(possible)
-
+task = parse_data(True)
+for springs, counts in task:
+    ans += solve(springs, counts)
 print(ans)
 print(datetime.now() - start)
