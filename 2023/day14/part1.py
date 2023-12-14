@@ -18,67 +18,35 @@ def get_input(inp):
         return open("test.txt").read()
 
 
-def parse_data():
-    global data
-    data = get_input(True).splitlines()
-
-    rocks = []
-    cubes = []
-    for y, l in enumerate(data):
-        for x, ch in enumerate(l):
-            if ch == "O":
-                rocks.append([x, y])
-            elif ch == "#":
-                cubes.append([x, y])
-    return rocks, cubes
+def parse_data(inp):
+    return get_input(inp).splitlines()
 
 
-dic = defaultdict(lambda: False)
-data = []
+def tilt_grid(grid_):
+    free = defaultdict(lambda: 0)
+    new_grid = [["." for _ in range(len(grid_[0]))] for _ in range(len(grid_))]
+    for i, l in enumerate(grid_):
+        for j, ch in enumerate(l):
+            if ch == "#":
+                free[j] = i + 1
+                new_grid[i][j] = "#"
+            elif ch == "O":
+                y = free[j]
+                new_grid[y][j] = "O"
+                free[j] = y + 1
+    return new_grid
+
+
+grid = parse_data(True)
+grid = tilt_grid(grid)
+
 ans = 0
-rocks, cubes = parse_data()
-rocks = sorted(rocks)
-for i, rock in enumerate(rocks):
-    x, y = rock
-    stop = False
-    if y == 0:
-        stop = True
-        dic[(x, y)] = True
+for i, y in enumerate(grid):
+    y = "".join(y)
+    count = y.count("O")
 
-    if not stop:
-        for st in sorted(cubes, key=lambda x: (x[0], -x[1])):
-            if st[0] != x:
-                if st[0] > x:
-                    break
-                continue
-            if st[1] > y:
-                continue
-            y = st[1]+1
-            while dic[(x, y)]:
-                y += 1
-            rocks[i] = [x, y]
-            dic[(x, y)] = True
-            stop = True
-            break
-    if not stop:
-        for r2 in sorted(rocks, key=lambda x: (x[0], -x[1])):
-            if [x, y] == r2:
-                continue
-            if r2[0] != x:
-                if r2[0] > x:
-                    break
-                continue
-            if r2[1] > y:
-                continue
-            rocks[i] = [x, r2[1] + 1]
-            stop = True
-            break
-
-    if not stop:
-        rocks[i] = [x, 0]
-        dic[(x, 0)] = True
-
-    ans += len(data) - rocks[i][1]
+    for _ in range(count):
+        ans += len(grid[0]) - i
 
 print(ans)
 print(datetime.now() - start)
