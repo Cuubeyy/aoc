@@ -8,15 +8,16 @@ from matplotlib import pyplot as plt
 file = open("leaderboard.json", encoding="utf8").read()
 
 jsn = json.loads(file)
-users = defaultdict(list)
+users = defaultdict()
 members = jsn["members"]
+ranking_per_day = defaultdict(list)
 for member_id in members:
     user = []
     member = members[member_id]
     name = member["name"]
     score = member["local_score"]
     completion = member["completion_day_level"]
-
+    star_2 = ()
     for day_index in completion:
         day = completion[day_index]
         star_1 = day["1"]
@@ -29,10 +30,12 @@ for member_id in members:
         except:
             time_2 = datetime.datetime(1000, 12, int(day_index), 6, 0) - datetime.datetime(2024, 1, 30, 0)
         user_stats = (day_index, time_1, time_2)
+        ranking_per_day[(day_index, 1, star_1["star_index"])] = (time_1, name)
+        if star_2:
+            ranking_per_day[(day_index, 2, star_2["star_index"])] = (time_2, name)
         # print("User:", name, "| Day:", day_index, "| Time for Star 1:", time_1, "| Time for Star 2:", time_2)
         user.append(user_stats)
     users[name] = [s for s in user]
-
 users_sorted_by_day = defaultdict(list)
 users_sorted_by_second_star = {}
 users_sorted_by_first_star = {}
@@ -41,26 +44,10 @@ users_sorted_by_first_star = {}
 for user, stats in users.items():
     users_sorted_by_day[user] = sorted(stats, key=lambda x: x[0])
 
-# Sorting users by time taken for the second star
-#users_sorted_by_second_star = sorted(users.items(), key=lambda x: (x[1][-1][2] - datetime.datetime(2023, 12, int(x[1][-1][0]), 6, 0)).total_seconds() if x[1] and x[1][-1][2] != datetime.datetime(1000, 12, int(x[1][-1][0]), 6, 0) - datetime.datetime(2024, 1, 30, 0) else float('inf'))
+interested_users = ["Cuubeyy", "Papierkorb2292", "raubtiermodus"]#, "Robocraft999", "Christian Schefe", "cmacht"]
+for day, part, star in sorted(ranking_per_day):
+    time, name = ranking_per_day[(day, part, star)]
+    if name in interested_users:
+        print(day, part, name, time)
 
-# Sorting users by time taken for the first star
-#users_sorted_by_first_star = sorted(users.items(), key=lambda x: x[1][-1][1])
 
-# Displaying the leaderboard
-headers = ["User", "Day", "Time for Star 1", "Time for Star 2"]
-for user, stats in users_sorted_by_day.items():
-    print(f"\nLeaderboard for {user}:")
-    print(tabulate(stats, headers=headers))
-
-# Plotting a graph for the top users by time taken for the second star
-top_users = 5  # You can adjust this number based on how many top users you want to display
-plt.figure(figsize=(10, 6))
-plt.title(f"Top {top_users} Users by Time for Second Star")
-plt.xlabel("User")
-plt.ylabel("Time (hours)")
-for user, stats in users_sorted_by_second_star[:top_users]:
-    day_index, time_1, time_2 = stats[-1]
-    plt.bar(user, time_2.total_seconds() / 3600)
-
-plt.show()
