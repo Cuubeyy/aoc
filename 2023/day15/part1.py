@@ -18,14 +18,9 @@ def get_input(inp):
         return open("test.txt").read()
 
 
-def parse_data():
-    data = get_input(True).split(",")
-
-    return data
-
 
 ans = 0
-task = parse_data()
+task = get_input(True)
 for group in task:
     count = 0
     for g in group:
