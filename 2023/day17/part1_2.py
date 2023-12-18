@@ -8,48 +8,53 @@ from functools import cache
 start = datetime.now()
 positions = set()
 
-
-def calculate_heat(path):
-    if len(path) == 0:
-        return
-    d = 0
-    for p in path:
-        d += int(grid[p[1]][p[0]])
-    print(d)
+dic = {}
+step_count = 0
 
 
-dic = defaultdict(lambda: False)
-
-
-def step(position, direction, count, path):
-    key = tuple((tuple(path), direction))
-    if position in path:
-        return
-    if key in dic:
-        return
+def step(position, direction, count, path, heat):
     x, y, = position
     if x < 0 or y < 0:
         return
-    elif x >= len(grid) or y >= len(grid):
+    elif x >= len(grid[0]) or y >= len(grid):
         return
+    global step_count
+    step_count += 1
+    if step_count % 1000000 == 0:
+        print(step_count, position, direction, count, len(dic), len(path), heat, min(h_min))
+    if position in path:
+        return
+    key = (position)
+    if key in dic.keys():
+        if heat >= dic[key]:
+            return
+
+    heat += int(grid[y][x])
+    if h_min:
+        if heat >= min(h_min):
+            return
     if position == (len(grid[0]) - 1, len(grid) - 1):
-        calculate_heat(path)
+        print(heat)
+        h_min.add(heat)
         return
-    dic[key] = True
-    path.add(position)
-    if count < 3:
-        step((x + direction[0], y + direction[1]), direction, count + 1, path.copy())
+    dic[key] = heat
+    path.append(position)
+    if count < 2:
+        step((x + direction[0], y + direction[1]), direction, count + 1, path.copy(), heat)
     if abs(direction[0]) == 1:
-        step((x, y + 1), (0, 1), 0, path.copy())
-        step((x, y - 1), (0, -1), 0, path.copy())
+        step((x, y + 1), (0, 1), 0, path.copy(), heat)
+        step((x, y - 1), (0, -1), 0, path.copy(), heat)
     elif abs(direction[1]) == 1:
-        step((x + 1, y), (1, 0), 0, path.copy())
-        step((x - 1, y), (-1, 0), 0, path.copy())
+        step((x + 1, y), (1, 0), 0, path.copy(), heat)
+        step((x - 1, y), (-1, 0), 0, path.copy(), heat)
 
 
 ans = 0
-grid = open("test.txt").read().splitlines()
-sys.setrecursionlimit(len(grid) ** 5)
-step((0, 0), (1, 0), 0, set())
-print(grid)
+h_min = set()
+grid = open("input.txt").read().splitlines()
+sys.setrecursionlimit(len(grid) ** 3)
+step((0, 0), (1, 0), 0, [], -int(grid[0][0]))
+print("-----\n", sorted(h_min)[0])
 print(datetime.now() - start)
+
+# 1545 False => Lower
