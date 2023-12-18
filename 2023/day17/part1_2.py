@@ -24,34 +24,33 @@ def step(position, direction, count, path, heat):
         print(step_count, position, direction, count, len(dic), len(path), heat, min(h_min))
     if position in path:
         return
-    key = (position)
+    key = (position, direction)
     if key in dic.keys():
         if heat >= dic[key]:
             return
 
     heat += int(grid[y][x])
-    if h_min:
-        if heat >= min(h_min):
-            return
     if position == (len(grid[0]) - 1, len(grid) - 1):
-        print(heat)
-        h_min.add(heat)
-        return
+        if count > 3:
+            print(heat)
+            h_min.add(heat)
+            return
     dic[key] = heat
     path.append(position)
-    if count < 2:
+    if count < 7:
         step((x + direction[0], y + direction[1]), direction, count + 1, path.copy(), heat)
-    if abs(direction[0]) == 1:
-        step((x, y + 1), (0, 1), 0, path.copy(), heat)
-        step((x, y - 1), (0, -1), 0, path.copy(), heat)
-    elif abs(direction[1]) == 1:
-        step((x + 1, y), (1, 0), 0, path.copy(), heat)
-        step((x - 1, y), (-1, 0), 0, path.copy(), heat)
+    if count > 1:
+        if abs(direction[0]) == 1:
+            step((x, y + 1), (0, 1), 0, path.copy(), heat)
+            step((x, y - 1), (0, -1), 0, path.copy(), heat)
+        elif abs(direction[1]) == 1:
+            step((x + 1, y), (1, 0), 0, path.copy(), heat)
+            step((x - 1, y), (-1, 0), 0, path.copy(), heat)
 
 
 ans = 0
 h_min = set()
-grid = open("input.txt").read().splitlines()
+grid = open("test.txt").read().splitlines()
 sys.setrecursionlimit(len(grid) ** 3)
 step((0, 0), (1, 0), 0, [], -int(grid[0][0]))
 print("-----\n", sorted(h_min)[0])
