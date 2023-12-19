@@ -1,6 +1,9 @@
+import sys
 from datetime import datetime
 import os
 import math
+import random
+
 from get_input import GetInput
 
 start = datetime.now()
@@ -19,7 +22,7 @@ def get_input(inp):
 
 
 def parse_data():
-    data = get_input(False).splitlines()
+    data = get_input(True).splitlines()
     temp = []
     for l in data:
         direction, amount, color = l.split()
@@ -29,16 +32,19 @@ def parse_data():
     return temp
 
 
-def area(vs):
-    a = 0
-    x0, y0 = vs[0]
-    for [x1, y1] in vs[1:]:
-        dx = x1-x0
-        dy = y1-y0
-        a += 0.5*(y0*dx - x0*dy)
-        x0 = x1
-        y0 = y1
-    return a
+def flood_recursive(matrix, position):
+    x, y = position
+    if x < 0 or y < 0:
+        return
+    elif x >= len(matrix[0]) or y >= len(matrix):
+        return
+    elif matrix[y][x] == "#":
+        return matrix
+    neighbors = [(x, y + 1), (x, y - 1), (x + 1, y), (x - 1, y)]
+    matrix[y][x] = "#"
+    for n in neighbors:
+        flood_recursive(matrix, n)
+    return matrix
 
 
 def fill_map(m_, positions_):
@@ -48,6 +54,7 @@ def fill_map(m_, positions_):
 
 
 task = parse_data()
+sys.setrecursionlimit(len(task)**2)
 positions = []
 x_min = math.inf
 y_min = math.inf
@@ -76,17 +83,18 @@ for i, (x, y) in enumerate(positions):
 last_y = 0
 last_x = 0
 volume = 0
-print(x_max, x_min, y_max, y_min)
-map = [["." for _ in range(x_max - x_min+1)] for _ in range(abs(y_max - y_min+1))]
+map = [["." for _ in range(x_max - x_min + 1)] for _ in range(abs(y_max - y_min + 1))]
 map = fill_map(map, positions)
-for m in map:
-    print("".join(m))
+
 did = False
 positions.sort(key=lambda x: (x[1], x[0]))
-print(area(positions))
-print(volume + len(positions))
+map = flood_recursive(map, (1, 1))
+for m in map:
+    ans += m.count("#")
+print(ans)
 print(datetime.now() - start)
 
 # 65098 TOO HIGH
 # 65097 TOO HIGH
 # 52748 TOO HIGH
+# 14948 FALSE
