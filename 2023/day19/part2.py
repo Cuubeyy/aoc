@@ -82,5 +82,6 @@ for line in inputs:
         continue
     else:
         ans += sum([x[1] for x in line])
+
 print(ans)
 print(datetime.now() - time_start)
