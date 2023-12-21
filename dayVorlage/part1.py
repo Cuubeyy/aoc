@@ -3,8 +3,6 @@ import os
 import math
 from get_input import GetInput
 
-start = datetime.now()
-
 
 def get_input(inp):
     if os.stat("input.txt").st_size == 0:
@@ -28,6 +26,7 @@ def parse_data():
     return data
 
 
+start_time = datetime.now()
 ans = 0
 task = parse_data()
 for line in task:
@@ -36,4 +35,4 @@ for line in task:
     ans += int(line)
 
 print(ans)
-print(datetime.now() - start)
+print(datetime.now() - start_time)
