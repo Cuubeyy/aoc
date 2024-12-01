@@ -13,12 +13,12 @@ list_two.sort()
 
 # part 1
 t1 = 0
-for i, l in enumerate(list_one):
-    t1 += abs(int(l) - int(list_two[i]))
+for l, r in zip(list_one, list_two):
+    t1 += abs(int(l) - int(r))
 print(t1)
 # part 2
 t2 = 0
-for i, l in enumerate(list_one):
+for l, r in zip(list_one, list_two):
     x = list_two.count(l)
     t2 += int(l) * x
 print(t2)
