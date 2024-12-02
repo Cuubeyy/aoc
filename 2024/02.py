@@ -1,12 +1,14 @@
 task = open(0).read().splitlines()
 ans, ans2 = 0, 0
 
+
 def correct(nums):
     for i, n in enumerate(nums):
         if i == len(nums) - 1:
             return True
-        if not 0 < nums[i+1] - n < 4:
+        if not 0 < nums[i + 1] - n < 4:
             return False
+
 
 for line in task:
     line = list(map(int, line.split()))
