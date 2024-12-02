@@ -16,6 +16,7 @@ t1 = 0
 for l, r in zip(list_one, list_two):
     t1 += abs(int(l) - int(r))
 print(t1)
+
 # part 2
 t2 = 0
 for l, r in zip(list_one, list_two):
