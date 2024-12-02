@@ -1,6 +1,5 @@
 task = open(0).read().splitlines()
-ans = 0
-ans2 = 0
+ans, ans2 = 0, 0
 
 def correct(nums):
     for i, n in enumerate(nums):
@@ -10,18 +9,17 @@ def correct(nums):
             return False
 
 for line in task:
-    temp = list(map(int, line.split()))
-    if temp[0] > temp[-1]:
-        temp = temp[::-1]
-    line2 = temp.copy()
+    line = list(map(int, line.split()))
+    if line[0] > line[-1]:
+        line = line[::-1]
 
     #part1
-    if correct(line2):
+    if correct(line):
         ans += 1
 
     #part2
-    for i in range(len(line2)):
-        l2 = line2.copy()
+    for i in range(len(line)):
+        l2 = line.copy()
         l2.pop(i)
         if correct(l2):
             ans2 += 1
