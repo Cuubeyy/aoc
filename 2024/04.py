@@ -44,6 +44,6 @@ def search_x(grid):
     return results
 
 
-grid = open("../04.in").read().splitlines()
+grid = open("04.in").read().splitlines()
 print(len(search(grid)))
 print(len(search_x(grid)))
