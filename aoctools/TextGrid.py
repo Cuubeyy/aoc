@@ -3,25 +3,34 @@ class TextGrid:
         self.matrix = data
         self.n, self.m = len(self.matrix), len(self.matrix[0])
 
-    def find_string_in_grid(self, target):
+    def find_string_in_grid(self, target, allow_reverse=False):
         """
-        Search for a string in a 2D grid in all 8 directions.
+        Search for a string in a 2D grid with optional direction control.
 
         Args:
             target (str): String to search for
+            allow_reverse (bool): If False, only search in forward/downward directions
 
         Returns:
-            List[tuple]: List of (row, col, direction) where string starts, empty if not found
+            List[tuple]: List of (row, col, direction) where string starts
         """
         if not self.matrix or not self.matrix[0] or not target:
             return []
 
         rows, cols = len(self.matrix), len(self.matrix[0])
-        directions = [
-            (-1, -1), (-1, 0), (-1, 1),  # Up-left, Up, Up-right
-            (0, -1), (0, 1),  # Left, Right
-            (1, -1), (1, 0), (1, 1)  # Down-left, Down, Down-right
-        ]
+
+        # Define directions based on allow_reverse parameter
+        if allow_reverse:
+            directions = [
+                (-1, -1), (-1, 0), (-1, 1),  # Up-left, Up, Up-right
+                (0, -1), (0, 1),  # Left, Right
+                (1, -1), (1, 0), (1, 1)  # Down-left, Down, Down-right
+            ]
+        else:
+            directions = [
+                (0, 1),  # Right
+                (1, -1), (1, 0), (1, 1)  # Down-left, Down, Down-right
+            ]
 
         def check_direction(row, col, dx, dy):
             if len(target) > max(rows, cols):
