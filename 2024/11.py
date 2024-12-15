@@ -1,5 +1,8 @@
+from datetime import datetime
+
 from aoctools.Input import Input
 from functools import cache
+
 
 @cache
 def stones_left(stone, steps):
@@ -7,7 +10,7 @@ def stones_left(stone, steps):
         return 1
     if stone == 0:
         return stones_left(1, steps - 1)
-    if l % 2 == 0:
+    if len(str(stone)) % 2 == 0:
         a = int(str(stone)[:len(str(stone)) // 2])
         b = int(str(stone)[len(str(stone)) // 2:])
         return stones_left(a, steps - 1) + stones_left(b, steps - 1)
@@ -29,9 +32,9 @@ def rules(stone):
 task = Input().get_input()
 stones = list(map(int, task.split()))
 ans = 0
+start = datetime.now()
 for stone in stones:
     ans += stones_left(stone, 75)
-
 for i in range(25):
     new_stones = []
     for j in range(len(stones)):
@@ -45,3 +48,6 @@ for i in range(25):
 
 print(len(stones))
 print(ans)
+
+end = datetime.now()
+print(end-start)
