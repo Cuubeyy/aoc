@@ -7,7 +7,6 @@ from collections import defaultdict
 import sys
 
 sys.setrecursionlimit(10000**2)
-
 ans = 0
 
 # line by line input
