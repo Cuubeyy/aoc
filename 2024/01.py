@@ -22,4 +22,5 @@ t2 = 0
 for l, r in zip(list_one, list_two):
     x = list_two.count(l)
     t2 += int(l) * x
+
 print(t2)
