@@ -30,6 +30,7 @@ arrows = \
     """. ^ A
     < v >""".splitlines()
 arrows = [lines.split() for lines in arrows]
+dir_map = {"<": (0, -1), ">": (0, 1), "^": (-1, 0), "v": (1, 0), "A": (0, 0)}
 
 
 def find(keys, key):
@@ -41,63 +42,45 @@ def find(keys, key):
 k_key = find(keypad, "A")
 a_key = find(arrows, "A")
 
-
-def solve(pos, sequence, keys):
-    steps = []
-    for ch in sequence:
-        fpos = find(keys, ch)
-        distance = (fpos[0] - pos[0], fpos[1] - pos[1])
-        if distance[1] > 0:
-            for _ in range(abs(distance[1])):
-                steps.append(">")
-        if distance[1] < 0:
-            for _ in range(abs(distance[1])):
-                steps.append("<")
-        if distance[0] > 0:
-            for _ in range(abs(distance[0])):
-                steps.append("v")
-        if distance[0] < 0:
-            for _ in range(abs(distance[0])):
-                steps.append("^")
-        steps.append("A")
-        pos = (pos[0] + distance[0], pos[1] + distance[1])
-    return steps
-
-
-@cache
-def solve2(ch, pos):
-    steps = []
-    fpos = find(arrows, ch)
-    distance = (fpos[0] - pos[0], fpos[1] - pos[1])
+def find_next(pos, new_pos):
+    temp = []
+    distance = (- pos[0] + new_pos[0], - pos[1] + new_pos[1])
     if distance[1] > 0:
         for _ in range(abs(distance[1])):
-            steps.append(">")
+            temp.append(">")
     if distance[1] < 0:
         for _ in range(abs(distance[1])):
-            steps.append("<")
+            temp.append("<")
     if distance[0] > 0:
         for _ in range(abs(distance[0])):
-            steps.append("v")
+            temp.append("v")
     if distance[0] < 0:
         for _ in range(abs(distance[0])):
-            steps.append("^")
-    steps.append("A")
-    return steps
+            temp.append("^")
+    temp.append("A")
+    return temp
 
-
-@cache
-def rec(move: str, step: int) -> int:
-    if step == 3:
-        return move
-    steps = solve2(move, a_key)
-    ss = ""
-    for s in steps:
-        ss += rec(s, step+1)
-    return ss
-
+def valid(start, path):
+    for point in path:
+        start = (start[0] + dir_map[point][0], start[1] + dir_map[point][1])
+    if task[start[0]][start[1]] == ".":
+        return False
+    return True
 
 for line in task[:1]:
-    steps = solve(k_key, line, keypad)
-    print(steps)
-    for step in steps:
-        print(step, rec(step, 1))
+    pos = k_key
+    seq = []
+    for ch, ch2 in zip(line, line[1:]):
+        p1 = find(keypad, ch)
+        p2 = find(keypad, ch2)
+        x = find_next(p1, p2)
+        v = valid(p1, x)
+        if not v:
+            perms = permutations(x)
+            for p in perms:
+                v = valid(p1, p)
+                if v:
+                    x = p
+                    break
+        seq += x
+    print(seq)
