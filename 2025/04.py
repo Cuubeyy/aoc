@@ -7,7 +7,8 @@ import sys
 sys.setrecursionlimit(1000000)
 
 directions = [(0, 1), (1, 0), (0, -1), (-1, 0), (1, -1), (-1, 1), (-1, -1), (1, 1)]
-ans = 0
+ans1 = 0
+ans2 = 0
 
 task = Input().get_input().splitlines()
 for i in range(len(task)):
@@ -27,6 +28,13 @@ def checkNeighbours(x, y, grid):
     return count
 
 
+for y, line in enumerate(task):
+    for x, ch in enumerate(line):
+        if ch == "@":
+            if checkNeighbours(x, y, task) < 4:
+                ans1 += 1
+
+
 removed = True
 while removed:
     removed = False
@@ -34,7 +42,7 @@ while removed:
         for x, ch in enumerate(line):
             if ch == "@":
                 if checkNeighbours(x, y, task) < 4:
-                    ans += 1
+                    ans2 += 1
                     removed = True
                     task[y][x] = "."
-print(ans)
+print(ans1, ans2)
